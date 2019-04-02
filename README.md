@@ -49,4 +49,10 @@ Can be a number between 1 and 10 or 'all'
     - [ ] an uninstallation utility
 - [ ] autostart function
 - [ ] option to delete fonts which aren't longer in Google's database
+- [ ] skip fonts which are already installed
+- [ ] be able to install fonts only for users
+    - [ ] be able to install fonts without folders for each font
+    - [ ] be able to install fonts in custom directory
+- [ ] more filter options (exact number of styles/max number of styles/one font)
+- [ ] install only fitting styles of a font
 - [ ] compatibility to other font services like Adobe Fonts
