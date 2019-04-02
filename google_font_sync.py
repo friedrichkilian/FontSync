@@ -141,7 +141,7 @@ def get_category_list(categories_string):
     return category_list
 
 
-# keeps the given number (as string) inside the given range
+# returns the number of the IGNORED_KEYWORD when the number is outside the range
 def keep_in_range(string, min_value, max_value):
 
     num = int(string)
@@ -220,7 +220,7 @@ def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, wid
         remove_file(zip_path)
 
 
-# syncs with 'all', 'all
+# syncs with 'all' for everything
 def default_sync():
 
     sync('all', 'all', 'all', 'all', 'all', 'all')
