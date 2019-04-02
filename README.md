@@ -26,14 +26,14 @@ no other valid category is given).
 Can be one of 'arabic', 'bengali', 'chinese-simplified', 'chinese-traditional', 'cyrillic', 'cyrillic-ext',
 'devanagari', 'greek', 'greek-ext', 'gujarati', 'gurmukhi', 'hebrew', 'japanese', 'kannada', 'khmer', 'korean', 'latin',
 'latin-ext', 'malayalam', 'myanmar', 'oriya', 'sinhala', 'tamil', 'telugu', 'thai', 'vietnamese' while 'latin-ext' is
-recommended. For all subsets you can use 'all'
+recommended. For all subsets you can use 'all'.
 
-You cannot separate two or more via comma! Wrong inputs will be taken as 'all'
+You cannot separate two or more via comma! Wrong inputs will be taken as 'all'.
 
 #### number of styles ####
 
-Can be a number between 2 and 18 or 'all'. All fonts which includes more or equal styles are selected. When a number over 18 or under 1 is
-given, the input will be taken as 'all'
+Can be a number between 2 and 18 or 'all'. All fonts which includes more or equal styles are selected. When a number
+over 18 or under 2 is given, the input will be taken as 'all'.
 
 #### thickness, slant & width ####
 
@@ -56,4 +56,5 @@ Can be a number between 1 and 10 or 'all'
 - [ ] more filter options (exact number of styles/max number of styles/one font)
 - [ ] install only fitting styles of a font
 - [ ] compatibility to other font services like Adobe Fonts
+- [ ] logging
 - [ ] auto-update
