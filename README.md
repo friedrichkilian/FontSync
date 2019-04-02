@@ -32,7 +32,7 @@ You cannot separate two or more via comma! Wrong inputs will be taken as 'all'
 
 #### number of styles ####
 
-Can be a number between 2 and 18 or 'all'. All fonts which includes more or equal styles are selected. When a number over 18 or under 1 is
+Can be a number between 2 and 18 or 'all'. All fonts which includes more or equal styles are selected. When a number over 18 or under 2 is
 given, the input will be taken as 'all'
 
 #### thickness, slant & width ####
