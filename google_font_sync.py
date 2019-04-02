@@ -148,11 +148,11 @@ def keep_in_range(string, min_value, max_value):
 
     if num < min_value:
 
-        return min_value
+        return IGNORED_KEYWORD
 
     if num > max_value:
 
-        return max_value
+        return IGNORED_KEYWORD
 
     return num
 
@@ -181,19 +181,19 @@ def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, wid
 
             continue
 
-        if font['stylecount'] < corrected_stylecount:
+        if corrected_stylecount != IGNORED_KEYWORD and font['stylecount'] < corrected_stylecount:
 
             continue
 
-        if corrected_thickness > 0 and corrected_thickness not in font['thickness']:
+        if corrected_thickness != IGNORED_KEYWORD and corrected_thickness not in font['thickness']:
 
             continue
 
-        if corrected_slant > 0 and corrected_slant not in font['slant']:
+        if corrected_slant != IGNORED_KEYWORD and corrected_slant not in font['slant']:
 
             continue
 
-        if corrected_width > 0 and corrected_width not in font['width']:
+        if corrected_width != IGNORED_KEYWORD and corrected_width not in font['width']:
 
             continue
 
@@ -223,7 +223,7 @@ def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, wid
 # syncs with 'all', 'all
 def default_sync():
 
-    sync('all', 'all', 0, 0, 0, 0)
+    sync('all', 'all', 'all', 'all', 'all', 'all')
 
 
 # noinspection PyProtectedMember
