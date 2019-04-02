@@ -56,3 +56,4 @@ Can be a number between 1 and 10 or 'all'
 - [ ] more filter options (exact number of styles/max number of styles/one font)
 - [ ] install only fitting styles of a font
 - [ ] compatibility to other font services like Adobe Fonts
+- [ ] logging
