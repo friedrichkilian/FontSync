@@ -6,74 +6,13 @@ from zipfile import ZipFile as ZIPFile
 from json import loads as parse
 from os import makedirs as make_dir, remove as remove_file
 
-# accepted values for "category"
-# & their equivalent which are used in Google's JSON file (which are readable so they're used while logging too)
-# values are ignored if they're not one of these
-CATEGORIES = {
-    'serif': 'Serif',
-    'sans-serif': 'Sans Serif',
-    'display': 'Display',
-    'handwriting': 'Handwriting',
-    'monospace': 'Monospace'
-}
-
-# accepted values for "subset"
-# & their readable equivalent which are used while logging
-# values are ignored if they're not one of these
-SUBSETS = {
-    'arabic': 'Arabic',
-    'bengali': 'Bengali',
-    'chinese-simplified': 'Chinese (Simplified)',
-    'chinese-traditional': 'Chinese (Traditional)',
-    'cyrillic': 'Cyrillic',
-    'cyrillic-ext': 'Cyrillic (Extended)',
-    'devanagari': 'Devanagari',
-    'greek': 'Greek',
-    'greek-ext': 'Greek (Extended)',
-    'gujarati': 'Gujarati',
-    'gurmukhi': 'Gurmukhi',
-    'hebrew': 'Hebrew',
-    'japanese': 'Japanese',
-    'kannada': 'Kannada',
-    'khmer': 'Khmer',
-    'korean': 'Korean',
-    'latin': 'Latin',
-    'latin-ext': 'Latin (Extended)',
-    'malayalam': 'Malayalam',
-    'myanmar': 'Myanmar',
-    'oriya': 'Oriya',
-    'sinhala': 'Sinhala',
-    'tamil': 'Tamil',
-    'telugu': 'Telugu',
-    'thai': 'Thai',
-    'vietnamese': 'Vietnamese'
-}
-
-GOOGLE_FONTS_JSON_URL = 'https://fonts.google.com/metadata/fonts'
-GOOGLE_FONTS_DOWNLOAD_URL = 'https://fonts.google.com/download?family={}'
-GOOGLE_FONTS_DOWNLOAD_URL_SPACE_REPLACEMENT = '+'
-
-FONTS_DIR = '/Library/Fonts/GoogleFonts/{}'
-FONTS_DIR_SPACE_REPLACEMENT = ''
-
-MIN_STYLECOUNT = 2
-MAX_STYLECOUNT = 19
-MIN_THICKNESS = 1
-MAX_THICKNESS = 10
-MIN_SLANT = 1
-MAX_SLANT = 10
-MIN_WIDTH = 1
-MAX_WIDTH = 10
-
-IGNORED_KEYWORD = 'all'
-SEPARATOR = ','
-
+from settings.settings_dict import get_setting
 
 # gets Google's JSON file which stores all fonts
 # & transfers them into a new list of fonts which is smaller in size
 def get_available_fonts():
 
-    json_string = internet.urlopen(GOOGLE_FONTS_JSON_URL).read().decode('utf-8')
+    json_string = internet.urlopen(get_setting('gfonts_url_json')).read().decode('utf-8')
     json_string = str(json_string).replace('\\n', '\n').lstrip(')]}\'\n')
     family_metadata_list = parse(json_string)['familyMetadataList']
     available_fonts = []
@@ -130,13 +69,13 @@ def get_category_list(categories_string):
     for category in categories_string:
 
         category_lower = category.lower()
-        if category_lower in CATEGORIES.keys():
+        if category_lower in get_setting('gfonts_categories').keys():
 
-            category_list.append(CATEGORIES[category_lower])
+            category_list.append(get_setting('gfont_categories')[category_lower])
 
     if len(category_list) == 0:
 
-        return IGNORED_KEYWORD
+        return get_setting('keyword_all')
 
     return category_list
 
@@ -148,11 +87,11 @@ def keep_in_range(string, min_value, max_value):
 
     if num < min_value:
 
-        return IGNORED_KEYWORD
+        return get_setting('keyword_all')
 
     if num > max_value:
 
-        return IGNORED_KEYWORD
+        return get_setting('keyword_all')
 
     return num
 
@@ -161,39 +100,41 @@ def keep_in_range(string, min_value, max_value):
 def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, width_arg):
 
     category_list = get_category_list(category_arg)
-    corrected_subset = SUBSETS.get(subset_arg.lower(), 'all')
+    corrected_subset = get_setting('gfonts_subsets').get(subset_arg.lower(), 'all')
 
-    corrected_stylecount = keep_in_range(stylecount_arg, MIN_STYLECOUNT, MAX_STYLECOUNT)
-    corrected_thickness = keep_in_range(thickness_arg, MIN_THICKNESS, MAX_THICKNESS)
-    corrected_slant = keep_in_range(slant_arg, MIN_SLANT, MAX_SLANT)
-    corrected_width = keep_in_range(width_arg, MIN_WIDTH, MAX_WIDTH)
+    corrected_stylecount = keep_in_range(stylecount_arg, get_setting('gfonts_stylecount_min'),
+                                         get_setting('gfonts_stylecount_max'))
+    corrected_thickness = keep_in_range(thickness_arg, get_setting('gfonts_thickness_min'),
+                                        get_setting('gfonts_thickness_max'))
+    corrected_slant = keep_in_range(slant_arg, get_setting('gfonts_slant_min'), get_setting('gfonts_slant_max'))
+    corrected_width = keep_in_range(width_arg, get_setting('gfonts_width_min'), get_setting('gfonts_width_max'))
 
     available_fonts = get_available_fonts()
 
     filtered_fonts = []
     for font in available_fonts:
 
-        if category_list != IGNORED_KEYWORD and font['category'] not in category_list:
+        if category_list != get_setting('keyword_all') and font['category'] not in category_list:
 
             continue
 
-        if corrected_subset != IGNORED_KEYWORD and corrected_subset not in font['subsets']:
+        if corrected_subset != get_setting('keyword_all') and corrected_subset not in font['subsets']:
 
             continue
 
-        if corrected_stylecount != IGNORED_KEYWORD and font['stylecount'] < corrected_stylecount:
+        if corrected_stylecount != get_setting('keyword_all') and font['stylecount'] < corrected_stylecount:
 
             continue
 
-        if corrected_thickness != IGNORED_KEYWORD and corrected_thickness not in font['thickness']:
+        if corrected_thickness != get_setting('keyword_all') and corrected_thickness not in font['thickness']:
 
             continue
 
-        if corrected_slant != IGNORED_KEYWORD and corrected_slant not in font['slant']:
+        if corrected_slant != get_setting('keyword_all') and corrected_slant not in font['slant']:
 
             continue
 
-        if corrected_width != IGNORED_KEYWORD and corrected_width not in font['width']:
+        if corrected_width != get_setting('keyword_all') and corrected_width not in font['width']:
 
             continue
 
@@ -201,12 +142,12 @@ def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, wid
 
     for font in filtered_fonts:
 
-        dir_name = font.replace(' ', FONTS_DIR_SPACE_REPLACEMENT)
-        dir_path = FONTS_DIR.format(dir_name)
+        dir_name = font.replace(' ', get_setting('output_dir_space_replacement'))
+        dir_path = get_setting('output_dir').format(dir_name)
         zip_path = dir_path + '.zip'
 
-        download_name = font.replace(' ', GOOGLE_FONTS_DOWNLOAD_URL_SPACE_REPLACEMENT)
-        download_url = GOOGLE_FONTS_DOWNLOAD_URL.format(download_name)
+        download_name = font.replace(' ', get_setting('gfonts_url_download_space_replacement'))
+        download_url = get_setting('gfonts_url_download').format(download_name)
 
         internet.urlretrieve(download_url, zip_path)
         zip_file = ZIPFile(zip_path, 'r')
