@@ -6,7 +6,8 @@ from zipfile import ZipFile as ZIPFile
 from json import loads as parse
 from os import makedirs as make_dir, remove as remove_file
 
-from settings.settings_dict import get_setting
+from settings import get_setting
+
 
 # gets Google's JSON file which stores all fonts
 # & transfers them into a new list of fonts which is smaller in size
