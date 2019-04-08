@@ -3,3 +3,6 @@ venv/*
 
 # disable IDE's stuff
 .idea/*
+
+# disable backend script for changing settings
+settings/backend.py

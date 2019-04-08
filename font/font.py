@@ -1,4 +1,0 @@
-class Font:
-
-    hi = ''
-
