@@ -1,4 +1,4 @@
-import datetime
+from datetime import date
 
 from settings import get_setting
 from fonts.gfonts_font_style import FontStyle
@@ -19,10 +19,10 @@ class FontFamily:
         self.subsets = get_subsets(details['subsets'])
 
         date_added = details['dateAdded'].split('-')
-        self.date_added = datetime.date(int(date_added[0]), int(date_added[1]), int(date_added[2]))
+        self.date_added = date(int(date_added[0]), int(date_added[1]), int(date_added[2]))
 
         last_modified = details['lastModified'].split('-')
-        self.last_modified = datetime.date(int(last_modified[0]), int(last_modified[1]), int(last_modified[2]))
+        self.last_modified = date(int(last_modified[0]), int(last_modified[1]), int(last_modified[2]))
 
         self.font_styles = [FontStyle(font_style_id, font_style_details) for font_style_id, font_style_details
                             in details['fonts'].items()]
