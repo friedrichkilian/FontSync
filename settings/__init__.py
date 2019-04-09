@@ -12,19 +12,27 @@ CONST_SETTINGS_FILE_NAME = 'const_settings'
 CONST_SETTINGS_FILE_PATH = SCRIPT_DIR + CONST_SETTINGS_FILE_NAME
 CONST_SETTINGS = load(open(CONST_SETTINGS_FILE_PATH, 'rb'))
 
+RUNTIME_SETTINGS = dict()
+
 
 def set_setting(key, value):
 
     if key not in USER_SETTINGS_KEYS:
+
         return
 
     USER_SETTINGS[key] = value
     __write_settings__()
 
 
+def set_runtime_setting(key, value):
+
+    RUNTIME_SETTINGS[key] = value
+
+
 def get_setting(key):
 
-    return CONST_SETTINGS.get(key, USER_SETTINGS.get(key))
+    return RUNTIME_SETTINGS.get(key, CONST_SETTINGS.get(key, USER_SETTINGS.get(key)))
 
 
 def __write_settings__():

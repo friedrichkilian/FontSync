@@ -5,6 +5,7 @@ from glob import glob as get_files
 from zipfile import ZipFile as ZIPFile
 from os import makedirs as make_dir, remove as remove_file
 
+from logging import log
 from settings import get_setting
 from fonts import get_fonts
 
@@ -38,15 +39,19 @@ def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, wid
         download_name = font_family.family_name.replace(' ', get_setting('gfonts_url_download_space_replacement'))
         download_url = get_setting('gfonts_url_download').format(download_name)
 
+        log('Downloading ' + font_family.family_name + ' from ' + download_url + ' to ' + zip_path + '...')
         internet.urlretrieve(download_url, zip_path)
         zip_file = ZIPFile(zip_path, 'r')
 
+        log('Clearing ' + dir_path + '/*...')
         make_dir(dir_path, exist_ok=True)
         files = get_files(zip_path + '/*')
         for f in files:
             remove_file(f)
 
+        log('Extracting ' + zip_path + '...')
         zip_file.extractall(dir_path)
+        log('Deleting ' + zip_path + '...')
         remove_file(zip_path)
 
 
@@ -61,6 +66,7 @@ https_config._create_default_https_context = https_config._create_unverified_con
 make_dir('/Library/Fonts/GoogleFonts', exist_ok=True)
 
 if len(arguments) == 7:
+
     sync(arguments[1], arguments[2], arguments[3], arguments[4], arguments[5], arguments[6])
 
 else:
