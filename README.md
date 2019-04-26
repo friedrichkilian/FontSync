@@ -5,19 +5,21 @@ It's only compatible to macOS right now!!
 
 ## Use ##
 
-You can use Google Font sync with either 6 or 0 arguments (everything else will be counted as no arguments).
-These arguments are:
+There are currently 6 supported arguments:
 1. [category](#category)
-2. [supported subset](#subset)
+2. [subset](#subset)
 3. [min. amount of styles](#number-of-styles)
 4. [thickness](#thickness-slant--width)
 5. [slant](#thickness-slant--width)
 6. [width](#thickness-slant--width)
 
+To use these arguments simply call them via "-[argname] [value(s)]" in the command line.
+Example: "font_sync.py -category all -subset latin-ext -width 2"
+
 #### category ####
 Can be one of 'serif', 'sans-serif', 'display', 'handwriting' and 'monospace'.
-For all styles you can use 'all', for a few you can seperate two or more of them via comma
-(e.g. 'serif,sans-serif,monospace').
+For all styles you can use 'all', if you want to include a specific set of categories you can simply add multiple values
+(like "-charset serif handwriting" for serif & handwriting)
 
 When a category is invalid the category will be ignored (when other, valid categories are given) or taken as 'all' (if
 no other valid category is given).
@@ -26,9 +28,7 @@ no other valid category is given).
 Can be one of 'arabic', 'bengali', 'chinese-simplified', 'chinese-traditional', 'cyrillic', 'cyrillic-ext',
 'devanagari', 'greek', 'greek-ext', 'gujarati', 'gurmukhi', 'hebrew', 'japanese', 'kannada', 'khmer', 'korean', 'latin',
 'latin-ext', 'malayalam', 'myanmar', 'oriya', 'sinhala', 'tamil', 'telugu', 'thai', 'vietnamese' while 'latin-ext' is
-recommended. For all subsets you can use 'all'.
-
-You cannot separate two or more via comma! Wrong inputs will be taken as 'all'.
+recommended. For all subsets you can use 'all'. Wrong inputs will be taken as 'all' as well.
 
 #### number of styles ####
 
@@ -43,7 +43,6 @@ Can be a number between 1 and 10 or 'all'
 
 - [ ] compatibility for Windows and Linux
     - [ ] auto-detection
-    - [ ] .exe for Windows / .App for macOS / .py and .deb for Linux
 - [ ] a GUI for simpler use
 - [ ] an installation utility
     - [ ] an uninstallation utility
@@ -55,6 +54,7 @@ Can be a number between 1 and 10 or 'all'
     - [ ] be able to install fonts in custom directory
 - [ ] more filter options (exact number of styles/max number of styles/one font)
 - [ ] install only fitting styles of a font
-- [ ] compatibility to other font services like Adobe Fonts
 - [ ] logging
 - [ ] auto-update
+- [ ] multi-threading
+- [ ] languages

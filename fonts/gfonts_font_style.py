@@ -1,6 +1,4 @@
-from gfonts_values.thickness import get_thickness
-from gfonts_values.slant import get_slant
-from gfonts_values.width import get_width
+from gfonts_values import get_thickness, get_slant, get_width
 
 
 class FontStyle:

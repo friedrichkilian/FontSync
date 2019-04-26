@@ -2,8 +2,7 @@ from datetime import date
 
 from settings import get_setting
 from fonts.gfonts_font_style import FontStyle
-from gfonts_values.category import Category
-from gfonts_values.subset import get_subsets
+from gfonts_values import get_subsets
 
 IGNORED_KEYWORD = get_setting('keyword_all')
 
@@ -13,7 +12,7 @@ class FontFamily:
     def __init__(self, details):
 
         self.family_name = details['family']
-        self.category = Category(details['category'])
+        self.category = details['category']
         self.size = details['size']
         self.designers = details['designers']
         self.subsets = get_subsets(details['subsets'])

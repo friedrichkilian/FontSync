@@ -1,5 +1,4 @@
 import ssl as https_config
-from sys import argv as arguments
 from urllib import request as internet
 from glob import glob as get_files
 from zipfile import ZipFile as ZIPFile
@@ -9,16 +8,9 @@ from logging import log
 from settings import get_setting
 from fonts import get_fonts
 
-from gfonts_values.category import get_category_list
-from gfonts_values.subset import get_subset
-from gfonts_values.stylecount import get_stylecount
-from gfonts_values.thickness import get_thickness
-from gfonts_values.slant import get_slant
-from gfonts_values.width import get_width
-
 from filter.gfonts_filter import filter_fonts
-
-IGNORED_KEYWORD = get_setting('keyword_all')
+from gfonts_values import get_category_list, get_subset, get_stylecount, get_thickness, get_slant, get_width
+from args import args_interface as args
 
 
 def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, width_arg):
@@ -55,19 +47,9 @@ def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, wid
         remove_file(zip_path)
 
 
-# syncs with 'all' for everything
-def default_sync():
-
-    sync('all', 'all', 'all', 'all', 'all', 'all')
-
-
 # noinspection PyProtectedMember
 https_config._create_default_https_context = https_config._create_unverified_context
 make_dir('/Library/Fonts/GoogleFonts', exist_ok=True)
 
-if len(arguments) == 7:
-
-    sync(arguments[1], arguments[2], arguments[3], arguments[4], arguments[5], arguments[6])
-
-else:
-    default_sync()
+sync(args.get_list('category'), args.get_str('subset'), args.get_int('stylecount'), args.get_int('thickness'),
+     args.get_int('slant'), args.get_int('width'))
