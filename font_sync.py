@@ -21,7 +21,7 @@ def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, wid
     slant = get_slant(slant_arg)
     width = get_width(width_arg)
 
-    for font_family in filter_fonts(get_fonts(), category_list, subset, stylecount, thickness, slant, width):
+    for font_family in filter_fonts(get_fonts(), category_list, subset, stylecount, slant, thickness, width):
 
         dir_name = font_family.family_name.replace(' ', get_setting('output_dir_space_replacement'))
         dir_path = get_setting('output_dir').format(dir_name)
