@@ -20,7 +20,7 @@
 #                                  returns NaN if there is no castable content
 
 from args import arg_values, arg_booleans
-from math import nan
+from math import nan  # nan (or NaN) stands for 'not a number' and represents bad results
 
 
 # will search through collected booleans (arg_booleans from args/__init__.py)
@@ -52,7 +52,7 @@ def get_list(key):
 
 
 # will return the nth value assigned to the key which can be casted to an integer
-# returns NaN if there is no castable content
+# returns NaN (not a number) if there is no castable content
 def get_int(key, n=1):
 
     # collect every integer which is found in the values
