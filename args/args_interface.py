@@ -1,26 +1,62 @@
+# Google Fonts Sync
+# by Kilian Friedrich
+#
+# 2019-04-28
+#
+# args/args_interface.py:
+#
+# This script is an interface to the command line arguments
+# Although the contents (which were collected in args/__init__.py) can be directly accessed this set of methods should
+# make it easier to handle.
+#
+# Supported data types:
+#   booleans (via get_bool(...)) - will search through collected booleans (arg_booleans from args/__init__.py) and
+#                                  return True if the given boolean was found
+#   strings (via get_str(...))   - will return the list as string, the entries will be separated by commas
+#                                  returns '' if the key wasn't found
+#   lists (via get_list(...))    - will return the values as they are stored in arg_values (from args/__init__.py)
+#                                  returns [] if the key wasn't found
+#   integer (via get_int(...))   - will return (the first) value assigned to the key which can be casted to an integer
+#                                  returns NaN if there is no castable content
+
 from args import arg_values, arg_booleans
+from math import nan
 
 
-def get_bool(bool_title):
+# will search through collected booleans (arg_booleans from args/__init__.py)
+# returns True if the given boolean was found
+def get_bool(key):
 
-    return bool(arg_values.get(bool_title, bool_title in arg_booleans))
-
-
-def get_str(str_title):
-
-    return str(arg_values.get(str_title, str_title in arg_booleans))
+    return key in arg_booleans
 
 
-def get_list(list_title):
+# will return the list as string, the entries will be separated by commas
+# returns '' if the key was not found
+def get_str(key):
 
-    value = arg_values.get(list_title, None)
-    if not isinstance(value, list):
+    string = ''  # the strng which will be returned later
+    # iterate through values
+    # or through an empty list if the key wasn't found (results in empty string since it doesn't loop)
+    for entry in arg_values.get(key, []):
 
-        value = [value]
+        string += str(entry) + ','  # add value + comma to the string
 
-    return list(value) if value is not None else list()
+    return string.rstrip(',')  # removes the last comma and returns the string
 
 
-def get_int(int_title):
+# will return he values as they are stored un arg_values (from args/__init__.py)
+# return [] if the key wasn't found
+def get_list(key):
 
-    return int(arg_values.get(int_title, int_title in arg_booleans))
+    return arg_values.get(key, [])
+
+
+# will return the nth value assigned to the key which can be casted to an integer
+# returns NaN if there is no castable content
+def get_int(key, n=1):
+
+    # collect every integer which is found in the values
+    integers = [int(entry) for entry in arg_values[key] if entry.lstrip('-', 1).isdigit()]
+
+    # return the nth found integer, if n is out of range return the first integer, if no integer was catched return NaN
+    return integers[n - 1] if n in range(1, len(integers) + 1) else integers[0] if len(integers) > 0 else nan
