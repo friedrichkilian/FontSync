@@ -8,7 +8,7 @@ It's only compatible to macOS right now!!
 There are currently 6 supported arguments:
 1. [category](#category)
 2. [subset](#subset)
-3. [min. amount of styles](#number-of-styles)
+3. [min. amount of styles (accessed via -stylecount)](#number-of-styles-accessed-via--stylecount)
 4. [thickness](#thickness-slant--width)
 5. [slant](#thickness-slant--width)
 6. [width](#thickness-slant--width)
@@ -30,7 +30,7 @@ Can be one of 'arabic', 'bengali', 'chinese-simplified', 'chinese-traditional', 
 'latin-ext', 'malayalam', 'myanmar', 'oriya', 'sinhala', 'tamil', 'telugu', 'thai', 'vietnamese' while 'latin-ext' is
 recommended. For all subsets you can use 'all'. Wrong inputs will be taken as 'all' as well.
 
-#### number of styles ####
+#### number of styles (accessed via -stylecount) ####
 
 Can be a number between 2 and 18 or 'all'. All fonts which includes more or equal styles are selected. When a number
 over 18 or under 2 is given, the input will be taken as 'all'.
@@ -43,7 +43,7 @@ Can be a number between 1 and 10 or 'all'
 
 - [ ] compatibility for Windows and Linux
     - [ ] auto-detection
-- [ ] a GUI for simpler use
+- [x] a GUI for simpler use
 - [ ] an installation utility
     - [ ] an uninstallation utility
 - [ ] autostart function
@@ -54,7 +54,10 @@ Can be a number between 1 and 10 or 'all'
     - [ ] be able to install fonts in custom directory
 - [ ] more filter options (exact number of styles/max number of styles/one font)
 - [ ] install only fitting styles of a font
-- [ ] logging
+- [x] logging
+- [ ] better logging (to file)
 - [ ] auto-update
 - [ ] multi-threading
 - [ ] languages
+- [ ] auto subset detection (is latin-ext per default in GUI)
+- [ ] icon?

@@ -7,7 +7,6 @@ from os import makedirs as make_dir, remove as remove_file
 from logging import log
 from settings import get_setting
 from fonts import get_fonts
-
 from filter.gfonts_filter import filter_fonts
 from gfonts_values import get_category_list, get_subset, get_stylecount, get_thickness, get_slant, get_width
 from args import args_interface as args
@@ -51,5 +50,6 @@ def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, wid
 https_config._create_default_https_context = https_config._create_unverified_context
 make_dir('/Library/Fonts/GoogleFonts', exist_ok=True)
 
-sync(args.get_list('category'), args.get_str('subset'), args.get_int('stylecount'), args.get_int('thickness'),
-     args.get_int('slant'), args.get_int('width'))
+if __name__ == '__main__':
+    sync(args.get_list('category'), args.get_str('subset'), args.get_int('stylecount'), args.get_int('thickness'),
+         args.get_int('slant'), args.get_int('width'))
