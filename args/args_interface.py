@@ -19,15 +19,15 @@
 #   integer (via get_int(...))   - will return (the first) value assigned to the key which can be casted to an integer
 #                                  returns NaN if there is no castable content
 
-from args import arg_values, arg_booleans
-from math import nan
+from args import ARG_V, ARG_B  # arguments are stored here
+from math import nan  # NaN will be returned when an integer is required but not existent
 
 
 # will search through collected booleans (arg_booleans from args/__init__.py)
 # returns True if the given boolean was found
 def get_bool(key):
 
-    return key in arg_booleans
+    return key in ARG_B
 
 
 # will return the list as string, the entries will be separated by commas
@@ -37,7 +37,7 @@ def get_str(key):
     string = ''  # the strng which will be returned later
     # iterate through values
     # or through an empty list if the key wasn't found (results in empty string since it doesn't loop)
-    for entry in arg_values.get(key, []):
+    for entry in ARG_V.get(key, []):
 
         string += str(entry) + ','  # add value + comma to the string
 
@@ -48,15 +48,15 @@ def get_str(key):
 # return [] if the key wasn't found
 def get_list(key):
 
-    return arg_values.get(key, [])
+    return ARG_V.get(key, [])
 
 
 # will return the nth value assigned to the key which can be casted to an integer
 # returns NaN if there is no castable content
 def get_int(key, n=1):
 
-    # collect every integer which is found in the values
-    integers = [int(entry) for entry in arg_values[key] if entry.lstrip('-', 1).isdigit()]
+    # collect every integer which is found in the values, uses an empty list if the key was not found
+    integers = [int(entry) for entry in ARG_V.get(key, []) if entry.lstrip('-').isdigit()]
 
     # return the nth found integer, if n is out of range return the first integer, if no integer was catched return NaN
     return integers[n - 1] if n in range(1, len(integers) + 1) else integers[0] if len(integers) > 0 else nan
