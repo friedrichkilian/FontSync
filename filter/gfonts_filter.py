@@ -1,5 +1,5 @@
 from logging import log
-from filter import IGNORED_KEYWORD
+from filter import IGNORED  # if a filter value is equal to this variable, it will be ignored
 
 
 def filter_fonts(fonts, category_list, subset, stylecount, slant, thickness, width):
@@ -16,9 +16,11 @@ def __filter_font_family__(font_family, category_list, subset, stylecount, slant
         and (subset == IGNORED_KEYWORD or subset in font_family.subsets) \
         and (stylecount == IGNORED_KEYWORD or stylecount <= len(font_family.font_styles)) \
         and len([font_style for font_style in font_family.font_styles
-                if __filter_font_style__(font_style, slant, thickness, width)]) != 0
+                if __filter_font_style__(font_style, slant, thickness, width)]) > 0
 
 
+# returns True if a font style fulfills the filter
+# takes filter specification as parameters
 def __filter_font_style__(font_style, slant, thickness, width):
 
     return font_style.has_details \

@@ -1,7 +1,7 @@
 from settings import get_setting
 from filter import IGNORED_KEYWORD
 
-CATEGORIES = get_setting('gfonts_categories')
+from filter import IGNORED
 
 SUBSETS = get_setting('gfonts_subsets')
 
@@ -26,30 +26,31 @@ def get_category_list(categories):
 
 def get_slant(slant):
 
-    return slant if MIN_SLANT <= slant <= MAX_SLANT else IGNORED_KEYWORD
+    return slant if MIN_SLANT <= slant <= MAX_SLANT else IGNORED
 
 
 def get_stylecount(stylecount):
 
-    return stylecount if MIN_STYLECOUNT <= stylecount <= MAX_STYLECOUNT else IGNORED_KEYWORD
+    return stylecount if MIN_STYLECOUNT <= stylecount <= MAX_STYLECOUNT else IGNORED
 
 
 def get_subset(subset):
 
-    return subset if subset in SUBSETS else IGNORED_KEYWORD
+    return subset if subset in SUBSETS else IGNORED
 
 
 def get_subsets(subsets):
 
     subset_list = [subset for subset in subsets if subset in SUBSETS]
-    return subset_list if len(subset_list) > 0 else IGNORED_KEYWORD
 
+    # return IGNORED if list is empty (= no subset in given list is ok)
+    return subset_list if len(subset_list) > 0 else IGNORED
 
 def get_thickness(thickness):
 
-    return thickness if MIN_THICKNESS <= thickness <= MAX_THICKNESS else IGNORED_KEYWORD
+    return thickness if MIN_THICKNESS <= thickness <= MAX_THICKNESS else IGNORED
 
 
 def get_width(width):
 
-    return width if MIN_WIDTH <= width <= MAX_WIDTH else IGNORED_KEYWORD
+    return width if MIN_WIDTH <= width <= MAX_WIDTH else IGNORED
