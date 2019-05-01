@@ -12,9 +12,9 @@ def __filter_font_family__(font_family, category_list, subset, stylecount, slant
 
     log('Checking ' + font_family.family_name + '...')
 
-    return (category_list == IGNORED_KEYWORD or font_family.category.lower().replace(' ', '-') in category_list) \
-        and (subset == IGNORED_KEYWORD or subset in font_family.subsets) \
-        and (stylecount == IGNORED_KEYWORD or stylecount <= len(font_family.font_styles)) \
+    return (category_list is IGNORED or font_family.category.lower().replace(' ', '-') in category_list) \
+        and (subset is IGNORED or subset in font_family.subsets) \
+        and (stylecount is IGNORED or stylecount <= len(font_family.font_styles)) \
         and len([font_style for font_style in font_family.font_styles
                 if __filter_font_style__(font_style, slant, thickness, width)]) > 0
 
@@ -24,6 +24,6 @@ def __filter_font_family__(font_family, category_list, subset, stylecount, slant
 def __filter_font_style__(font_style, slant, thickness, width):
 
     return font_style.has_details \
-           and (slant == IGNORED_KEYWORD or font_style.slant == slant) \
-           and (thickness == IGNORED_KEYWORD or font_style.thickness == thickness) \
-           and (width == IGNORED_KEYWORD or font_style.width == width)
+           and (slant is IGNORED or font_style.slant == slant) \
+           and (thickness is IGNORED or font_style.thickness == thickness) \
+           and (width is IGNORED or font_style.width == width)

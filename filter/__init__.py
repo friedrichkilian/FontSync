@@ -7,4 +7,4 @@
 #
 # This script is mainly without purpose but it stores IGNORED (which is used when filter are disabled)
 
-IGNORED_KEYWORD = get_setting('keyword_all')
+IGNORED = -1
