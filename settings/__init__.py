@@ -8,12 +8,6 @@ USER_SETTINGS_FILE_PATH = SCRIPT_DIR + USER_SETTINGS_FILE_NAME
 USER_SETTINGS = load(open(USER_SETTINGS_FILE_PATH, 'rb'))
 USER_SETTINGS_KEYS = USER_SETTINGS.keys()
 
-CONST_SETTINGS_FILE_NAME = 'const_settings'
-CONST_SETTINGS_FILE_PATH = SCRIPT_DIR + CONST_SETTINGS_FILE_NAME
-CONST_SETTINGS = load(open(CONST_SETTINGS_FILE_PATH, 'rb'))
-
-RUNTIME_SETTINGS = dict()
-
 
 def set_setting(key, value):
 
@@ -25,14 +19,9 @@ def set_setting(key, value):
     __write_settings__()
 
 
-def set_runtime_setting(key, value):
-
-    RUNTIME_SETTINGS[key] = value
-
-
 def get_setting(key):
 
-    return RUNTIME_SETTINGS.get(key, CONST_SETTINGS.get(key, USER_SETTINGS.get(key)))
+    return USER_SETTINGS.get(key)
 
 
 def __write_settings__():

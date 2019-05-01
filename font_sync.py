@@ -6,7 +6,7 @@ from os import makedirs as make_dir, remove as remove_file
 
 from logging import log
 from settings import get_setting
-from fonts import get_fonts
+from fonts import get_all_gfonts
 from filter.gfonts_filter import filter_fonts
 from gfonts_values import get_category_list, get_subset, get_stylecount, get_thickness, get_slant, get_width
 from args import args_interface as args
@@ -21,14 +21,14 @@ def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, wid
     slant = get_slant(slant_arg)
     width = get_width(width_arg)
 
-    for font_family in filter_fonts(get_fonts(), category_list, subset, stylecount, slant, thickness, width):
+    for font_family in filter_fonts(get_all_gfonts(), category_list, subset, stylecount, slant, thickness, width):
 
         dir_name = font_family.family_name.replace(' ', get_setting('output_dir_space_replacement'))
         dir_path = get_setting('output_dir').format(dir_name)
         zip_path = dir_path + '.zip'
 
-        download_name = font_family.family_name.replace(' ', get_setting('gfonts_url_download_space_replacement'))
-        download_url = get_setting('gfonts_url_download').format(download_name)
+        download_name = font_family.family_name.replace(' ', '+')
+        download_url = 'https://fonts.google.com/download?family={}'.format(download_name)
 
         log('Downloading ' + font_family.family_name + ' from ' + download_url + ' to ' + zip_path + '...')
         internet.urlretrieve(download_url, zip_path)
