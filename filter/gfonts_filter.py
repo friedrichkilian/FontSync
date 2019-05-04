@@ -10,13 +10,14 @@
 
 from logging import log
 from filter import IGNORED  # if a filter value is equal to this variable, it will be ignored
+from fonts import get_all_gfonts
 
 
 # returns a list of fonts which fulfill the filter
 # takes filter specifications as parameters
-def filter_fonts(fonts, category_list, subset, stylecount, slant, thickness, width):
+def filter_fonts(category_list, subset, stylecount, slant, thickness, width):
 
-    return [font for font in fonts
+    return [font for font in get_all_gfonts()
             if __filter_font_family__(font, category_list, subset, stylecount, slant, thickness, width)]
 
 
