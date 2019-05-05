@@ -2,4 +2,4 @@
 venv/*
 
 # disable backend script for changing settings
-backend.py
+settings/backend.py
