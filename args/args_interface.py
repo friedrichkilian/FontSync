@@ -18,6 +18,19 @@
 #                                  returns [] if the key wasn't found
 #   integer (via get_int(...))   - will return (the first) value assigned to the key which can be casted to an integer
 #                                  returns NaN if there is no castable content
+#
+# Copyright after CC BY-NC-SA 4.0
+# You are free to:
+#   SHARE - copy and redistribute the material in any medium or format
+#   ADAPT - remix, transform, and build upon the material
+# Under the following terms:
+#   ATTRIBUTION - You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+#                 You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or
+#                 your use.
+#   NONCOMMERCIAL - You may not use the material for commercial purposes.
+#   SHAREALIKE - If you remix, transform, or build upon the material, you must distribute your contributions under the
+#                same license as the original.
+# Follow https://creativecommons.org/licenses/by-nc-sa/4.0/ for more information.
 
 from args import ARG_V, ARG_B  # arguments are stored here
 from math import nan  # NaN will be returned when an integer is required but not existent

@@ -5,8 +5,25 @@
 #
 # gui/main_frame.py:
 #
-# This script builds a frame, parses given values and calls font_sync.py -> sync(...)
-# It's a mess but it works
+# This script builds a frame and holds all necessary functions & variables.
+# The frame is a collection of all possible filters and buttons (to start the syncing process and to open settings (not
+# implemented yet).
+# All these filters got there global variables which stores their state. This is necessary so that the
+# __execute_sync__() function can access the selected filters. __execute_sync__() is called via a press on the 'Sync'
+# button in the frame.
+#
+# Copyright after CC BY-NC-SA 4.0
+# You are free to:
+#   SHARE - copy and redistribute the material in any medium or format
+#   ADAPT - remix, transform, and build upon the material
+# Under the following terms:
+#   ATTRIBUTION - You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+#                 You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or
+#                 your use.
+#   NONCOMMERCIAL - You may not use the material for commercial purposes.
+#   SHAREALIKE - If you remix, transform, or build upon the material, you must distribute your contributions under the
+#                same license as the original.
+# Follow https://creativecommons.org/licenses/by-nc-sa/4.0/ for more information.
 
 from tkinter import Tk, Frame, Label, Button, Checkbutton, OptionMenu, Scale, StringVar, IntVar, BooleanVar
 from re import sub

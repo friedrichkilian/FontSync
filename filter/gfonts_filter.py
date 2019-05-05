@@ -5,8 +5,21 @@
 #
 # filter/gfonts_filter.py:
 #
-# This script filters a list of Google Fonts when the filter_fonts is called.
-# All other functions aren't meant to be called from outside!
+# This script filters a list of Google Fonts when the filter_fonts() function is called.
+# All other functions are needed for filter_fonts() and aren't meant to be called from outside!
+#
+# Copyright after CC BY-NC-SA 4.0
+# You are free to:
+#   SHARE - copy and redistribute the material in any medium or format
+#   ADAPT - remix, transform, and build upon the material
+# Under the following terms:
+#   ATTRIBUTION - You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+#                 You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or
+#                 your use.
+#   NONCOMMERCIAL - You may not use the material for commercial purposes.
+#   SHAREALIKE - If you remix, transform, or build upon the material, you must distribute your contributions under the
+#                same license as the original.
+# Follow https://creativecommons.org/licenses/by-nc-sa/4.0/ for more information.
 
 from logging import log
 from filter import IGNORED  # if a filter value is equal to this variable, it will be ignored
