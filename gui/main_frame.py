@@ -80,6 +80,7 @@ def create_frame():
 
         # add BooleanVar() to category_checkbox_values which stores whether the checkbox is checked
         category_checkbox_values[category] = BooleanVar()
+        category_checkbox_values[category].set(True)  # set it to True
 
         # construct category title of its id
         # id is like: sans-serif
@@ -90,8 +91,9 @@ def create_frame():
         category_name = sub(r'\b[a-z]', lambda s: s.group().upper(), category.replace('-', ' '))
 
         # add actual checkbox
-        Checkbutton(category_frame, text=category_name, variable=category_checkbox_values[category], onvalue=True,
-                    offvalue=False).place(x=10, y=y)
+        Checkbutton(category_frame, text=category_name, variable=category_checkbox_values[category],
+                    onvalue=True, offvalue=False,
+                    command=lambda: __toggle_checkbox__()).place(x=10, y=y)
 
     category_frame.config(width=230, height=y+30)  # set frames size
     category_frame.place(x=10, y=10)  # add frame to window
@@ -229,6 +231,15 @@ def create_frame():
 
     # ===== FINISH ===== #
     master.mainloop()  # make the window visible
+
+
+# this will be called when a checkbox was enabled/disabled and makes sure that at least one checkbox is always checked
+def __toggle_checkbox__():
+
+    # if amount of checked checkboxes is zero
+    if len([val for val in category_checkbox_values.values() if val.get()]) == 0:
+
+        [val.set(True) for val in category_checkbox_values.values()]  # enable it again
 
 
 # syncs
