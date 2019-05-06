@@ -20,7 +20,6 @@
 #   SHAREALIKE - If you remix, transform, or build upon the material, you must distribute your contributions under the
 #                same license as the original.
 # Follow https://creativecommons.org/licenses/by-nc-sa/4.0/ for more information.
-import struct
 
 from gfonts_values import get_thickness, get_slant, get_width
 
