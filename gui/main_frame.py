@@ -106,6 +106,7 @@ def create_frame():
 
     global subset_selected  # access global variable
     subset_selected = StringVar()  # create a StringVar to store currently selected subset
+    subset_selected.set('All subsets')
 
     # iterate through available subsets
     for subset in SUBSETS:
