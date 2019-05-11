@@ -31,23 +31,17 @@ from os import makedirs as make_dir, remove as remove_file
 from logging import log
 from settings import get_setting
 from filter.gfonts_filter import filter_fonts
-from gfonts_values import get_category_list, get_subset, get_stylecount, get_thickness, get_slant, get_width
+from gfonts_values import validate
 from args import args_interface as args
 
 
 # this script takes filter as arguments, checks them and syncs fonts
-def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, width_arg):
+def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, width_arg, fonts=None):
 
-    # check filter values and correct them if necessary
-    category_list = get_category_list(category_arg)
-    subset = get_subset(subset_arg)
-    stylecount = get_stylecount(stylecount_arg)
-    thickness = get_thickness(thickness_arg)
-    slant = get_slant(slant_arg)
-    width = get_width(width_arg)
+    fonts = fonts if fonts is not None else filter_fonts(*validate(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, width_arg))
 
     # get all filtered fonts and iterate through them
-    for font_family in filter_fonts(category_list, subset, stylecount, slant, thickness, width):
+    for font_family in fonts:
 
         # get target directory / target file
         dir_name = font_family.family_name.replace(' ', get_setting('output_dir_space_replacement'))

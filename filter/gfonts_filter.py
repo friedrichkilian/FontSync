@@ -28,17 +28,34 @@ from fonts import get_all_gfonts
 
 # returns a list of fonts which fulfill the filter
 # takes filter specifications as parameters
-def filter_fonts(category_list, subset, stylecount, slant, thickness, width):
+def filter_fonts(category_list, subset, stylecount, slant, thickness, width, gui=None):
 
-    return [font for font in get_all_gfonts()
-            if __filter_font_family__(font, category_list, subset, stylecount, slant, thickness, width)]
+    if gui is None:
+
+        return [font for font in get_all_gfonts()
+                if __filter_font_family__(font, category_list, subset, stylecount, slant, thickness, width)]
+
+    all_fonts = get_all_gfonts()
+    filtered_fonts = list()
+
+    for i in range(0, len(all_fonts)):
+
+        gui[0].set(i)
+        if __filter_font_family__(all_fonts[i], category_list, subset, stylecount, slant, thickness, width, gui[1]):
+
+            filtered_fonts.append(all_fonts[i])
+
+    print(gui[1])
+
+    return filtered_fonts
 
 
 # returns True if a font fulfills the filter
 # takes filter specification as parameters
-def __filter_font_family__(font_family, category_list, subset, stylecount, slant, thickness, width):
+def __filter_font_family__(font_family, category_list, subset, stylecount, slant, thickness, width, label=None):
 
-    log('Checking ' + font_family.family_name + '...')  # log 'Checking [...]...'
+    print(label)
+    log('Checking ' + font_family.family_name + '...', label=label)  # log 'Checking [...]...'
 
     return (category_list is IGNORED or font_family.category.lower().replace(' ', '-') in category_list) \
         and (subset is IGNORED or subset in font_family.subsets) \

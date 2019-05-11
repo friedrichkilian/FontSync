@@ -98,3 +98,9 @@ def get_thickness(thickness):
 def get_width(width):
 
     return width if MIN_WIDTH <= width <= MAX_WIDTH else IGNORED
+
+
+def validate(category_list, subset, stylecount, thickness, slant, width):
+
+    return get_category_list(category_list), get_subset(subset), get_stylecount(stylecount), get_thickness(thickness),\
+           get_slant(slant), get_width(width)

@@ -41,6 +41,7 @@ Can be a number between 1 and 10 or 'all'
 
 ## Planned updates
 
+- [ ] gui execute in new thread & stop function
 - [ ] compatibility for Windows and Linux
     - [ ] auto-detection
 - [x] a GUI for simpler use

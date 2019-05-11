@@ -26,10 +26,15 @@
 # Follow https://creativecommons.org/licenses/by-nc-sa/4.0/ for more information.
 
 from tkinter import Tk, Frame, Label, Button, Checkbutton, OptionMenu, Scale, StringVar, IntVar, BooleanVar
+from tkinter.ttk import Progressbar
 from re import sub
 
 from gfonts_values import CATEGORIES, SUBSETS
 from font_sync import sync
+from fonts import get_all_gfonts
+from filter import IGNORED
+from filter.gfonts_filter import filter_fonts
+from gfonts_values import validate
 
 # stores which checkboxes are checked
 category_checkbox_values = dict()
@@ -54,6 +59,21 @@ slant = None
 apply_width = None
 width = None
 
+progress = None
+label = None
+
+
+def get_filtered_fonts_by_gui():
+
+    global available_fonts
+    available_fonts = filter_fonts(*validate(
+        [category for category in category_checkbox_values.keys() if category_checkbox_values[category].get()],
+        subset_options.get(subset_selected.get(), IGNORED), stylecount.get() if apply_stylecount.get() else 0,
+        thickness.get() if apply_thickness.get() else 0, slant.get() if apply_slant.get() else 0,
+        width.get() if apply_width.get() else 0), gui=(progress, label))
+
+    label.set('Checked all fonts ({} fitting found)'.format(len(available_fonts)))
+
 
 # builds the frame
 def create_frame():
@@ -63,7 +83,7 @@ def create_frame():
     master.title('Google Fonts Sync by kilianfriedrich')  # set title
 
     # set size
-    master.geometry('710x300')
+    master.geometry('710x335')
     master.resizable(width=False, height=False)  # don't make it resizable bc it's not responsive
 
     # ===== CATEGORY SECTION ===== #
@@ -125,7 +145,8 @@ def create_frame():
         subset_options[subset_name] = subset  # store it
 
     # create subset dropdown list
-    subset_dropdown = OptionMenu(subset_frame, subset_selected, 'All subsets', *subset_options)
+    subset_dropdown = OptionMenu(subset_frame, subset_selected, 'All subsets', *subset_options,
+                                 command=get_filtered_fonts_by_gui)
     subset_dropdown.place(x=10, y=30)  # place it
 
     subset_frame.config(width=200, height=60)  # set frame sizes
@@ -140,13 +161,14 @@ def create_frame():
     global apply_stylecount  # access global variable
     apply_stylecount = BooleanVar()  # create BooleanVar to store whether this filter should be applied
     # add checkbox to select whether the filter should be applied
-    Checkbutton(stylecount_frame, text='Apply this filter', variable=apply_stylecount, onvalue=True, offvalue=False)\
-        .place(x=10, y=30)
+    Checkbutton(stylecount_frame, text='Apply this filter', variable=apply_stylecount, onvalue=True, offvalue=False,
+                command=get_filtered_fonts_by_gui).place(x=10, y=30)
 
     global stylecount  # access global variable
     stylecount = IntVar()  # create IntVar to store value of following slider:
     # create slider for the filter
-    Scale(stylecount_frame, from_=2, to=10, orient='horizontal', variable=stylecount).place(x=10, y=50)
+    Scale(stylecount_frame, from_=2, to=10, orient='horizontal', variable=stylecount,
+          command=get_filtered_fonts_by_gui).place(x=10, y=50)
     # set frame sizes
     stylecount_frame.config(width=220, height=100)  # set frame sizes
     stylecount_frame.place(x=250, y=80)  # add frame to window
@@ -160,13 +182,14 @@ def create_frame():
     global apply_thickness  # access global variable
     apply_thickness = BooleanVar()  # create BooleanVar to store whether this filter should be applied
     # add checkbox to select whether the filter should be applied
-    Checkbutton(thickness_frame, text='Apply this filter', variable=apply_thickness, onvalue=True, offvalue=False) \
-        .place(x=10, y=30)
+    Checkbutton(thickness_frame, text='Apply this filter', variable=apply_thickness, onvalue=True, offvalue=False,
+                command=get_filtered_fonts_by_gui).place(x=10, y=30)
 
     global thickness  # access global variable
     thickness = IntVar()  # create IntVar to store value of following slider:
     # create slider for the filter
-    Scale(thickness_frame, from_=1, to=10, orient='horizontal', variable=thickness).place(x=10, y=50)
+    Scale(thickness_frame, from_=1, to=10, orient='horizontal', variable=thickness,
+          command=get_filtered_fonts_by_gui).place(x=10, y=50)
 
     thickness_frame.config(width=220, height=100)  # set frame sizes
     thickness_frame.place(x=480, y=80)  # add frame to window
@@ -180,13 +203,14 @@ def create_frame():
     global apply_slant  # access global variable
     apply_slant = BooleanVar()  # create BooleanVar to store whether this filter should be applied
     # add checkbox to select whether the filter should be applied
-    Checkbutton(slant_frame, text='Apply this filter', variable=apply_slant, onvalue=True, offvalue=False) \
-        .place(x=10, y=30)
+    Checkbutton(slant_frame, text='Apply this filter', variable=apply_slant, onvalue=True, offvalue=False,
+                command=get_filtered_fonts_by_gui).place(x=10, y=30)
 
     global slant  # access global variable
     slant = IntVar()  # create IntVar to store value of following slider:
     # create slider for the filter
-    Scale(slant_frame, from_=1, to=10, orient='horizontal', variable=slant).place(x=10, y=50)
+    Scale(slant_frame, from_=1, to=10, orient='horizontal', variable=slant,
+          command=get_filtered_fonts_by_gui).place(x=10, y=50)
 
     slant_frame.config(width=220, height=100)  # set frame sizes
     slant_frame.place(x=250, y=190)  # add frame to window
@@ -200,13 +224,14 @@ def create_frame():
     global apply_width  # access global variable
     apply_width = BooleanVar()  # create BooleanVar to store whether this filter should be applied
     # add checkbox to select whether the filter should be applied
-    Checkbutton(width_frame, text='Apply this filter', variable=apply_width, onvalue=True, offvalue=False) \
-        .place(x=10, y=30)
+    Checkbutton(width_frame, text='Apply this filter', variable=apply_width, onvalue=True, offvalue=False,
+                command=get_filtered_fonts_by_gui).place(x=10, y=30)
 
     global width  # access global variable
     width = IntVar()  # create IntVar to store value of following slider:
     # create slider for the filter
-    Scale(width_frame, from_=1, to=10, orient='horizontal', variable=width).place(x=10, y=50)
+    Scale(width_frame, from_=1, to=10, orient='horizontal', variable=width,
+          command=get_filtered_fonts_by_gui).place(x=10, y=50)
 
     width_frame.config(width=220, height=100)  # set frame sizes
     width_frame.place(x=480, y=190)  # add frame to window
@@ -225,10 +250,34 @@ def create_frame():
     # add target function
     # this could be done without lambda:... but this results in the fact that __execute_sync__() is called before the
     # button is pressed
-    button.config(command=lambda: __execute_sync__())
+    button.config(command=__execute_sync__)
 
     button.pack(fill='both', expand=1)  # let the btton expand
     button_frame.place(x=10, y=260)  # place the frame
+
+    # ===== PROGRESS BAR SECTION ===== #
+    # create a frame for the progress bar
+    # this is needed for the following reason:
+    #   the thickness of a bar can't be set in pixels
+    #   a frame's size can be set in pixels
+    #   -> let the bar fill the frame
+    progressbar_frame = Frame(master, width=690, height=10)
+    progressbar_frame.pack_propagate(0)  # don't let the frame resize itself
+
+    global progress
+    progress = IntVar()
+    Progressbar(progressbar_frame, variable=progress).pack(fill='both', expand=1)  # create button and pack it
+
+    progressbar_frame.place(x=10, y=300)  # place the frame
+
+    global label
+    label = StringVar()
+    label.set('Nothing in process...')
+
+    # add label which stores details about the current process
+    Label(master, textvariable=label, font=('Sans Serif', 12), fg='grey', width=64, anchor='nw').place(x=10, y=310)
+
+    get_filtered_fonts_by_gui()
 
     # ===== FINISH ===== #
     master.mainloop()  # make the window visible
@@ -241,6 +290,8 @@ def __toggle_checkbox__():
     if len([val for val in category_checkbox_values.values() if val.get()]) == 0:
 
         [val.set(True) for val in category_checkbox_values.values()]  # enable it again
+
+    get_filtered_fonts_by_gui()
 
 
 # syncs
