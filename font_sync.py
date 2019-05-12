@@ -22,7 +22,6 @@
 #                same license as the original.
 # Follow https://creativecommons.org/licenses/by-nc-sa/4.0/ for more information.
 
-import ssl as https_config
 from urllib import request as internet
 from glob import glob as get_files
 from zipfile import ZipFile as ZIPFile
@@ -36,12 +35,28 @@ from args import args_interface as args
 
 
 # this script takes filter as arguments, checks them and syncs fonts
-def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, width_arg, fonts=None):
+def sync(category_arg=None, subset_arg=None, stylecount_arg=None, thickness_arg=None, slant_arg=None, width_arg=None,
+         fonts=None, gui=None):
 
-    fonts = fonts if fonts is not None else filter_fonts(*validate(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, width_arg))
+    fonts = fonts if fonts is not None else filter_fonts(*validate(category_arg, subset_arg, stylecount_arg,
+                                                                   thickness_arg, slant_arg, width_arg))
+
+    # create target folder if it doesn't exist
+    make_dir('/Library/Fonts/GoogleFonts', exist_ok=True)
 
     # get all filtered fonts and iterate through them
-    for font_family in fonts:
+    for i in range(0, len(fonts)):
+
+        from gui.main_frame import cancel
+        if cancel:
+
+            break
+
+        font_family = fonts[i]
+
+        if gui is not None:
+
+            gui[0].set(i)
 
         # get target directory / target file
         dir_name = font_family.family_name.replace(' ', get_setting('output_dir_space_replacement'))
@@ -52,12 +67,15 @@ def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, wid
         download_name = font_family.family_name.replace(' ', '+')
         download_url = 'https://fonts.google.com/download?family={}'.format(download_name)
 
-        log('Downloading ' + font_family.family_name + ' from ' + download_url + ' to ' + zip_path + '...')
+        log(font_family.family_name + ' - Downloading ' + font_family.family_name + ' from ' + download_url + ' to '
+            + zip_path + '...', lbl=gui[1])
+
+        open(zip_path, 'x')
 
         internet.urlretrieve(download_url, zip_path)  # retrieve zip file
         zip_file = ZIPFile(zip_path, 'r')  # open zip file
 
-        log('Clearing ' + dir_path + '/*...')
+        log(font_family.family_name + ' - Clearing ' + dir_path + '/*...', lbl=gui[1])
 
         make_dir(dir_path, exist_ok=True)  # create target path if not existing
 
@@ -67,22 +85,16 @@ def sync(category_arg, subset_arg, stylecount_arg, thickness_arg, slant_arg, wid
 
             remove_file(f)
 
-        log('Extracting ' + zip_path + '...')
+        log(font_family.family_name + ' - Extracting ' + zip_path + '...', lbl=gui[1])
 
         zip_file.extractall(dir_path)  # extract files
 
-        log('Deleting ' + zip_path + '...')
+        log(font_family.family_name + ' - Deleting ' + zip_path + '...', lbl=gui[1])
 
         remove_file(zip_path)  # remove zip file after extraction
 
 
-# SSL doesn't work (idk why) so just disable it?
-# maybe not the best workaround but better than nothing
-# noinspection PyProtectedMember
-https_config._create_default_https_context = https_config._create_unverified_context
 
-# create target folder if it doesn't exist
-make_dir('/Library/Fonts/GoogleFonts', exist_ok=True)
 
 # just execute if this script is called via command line directly! (not via font_sync_gui.py)
 if __name__ == '__main__':

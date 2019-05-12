@@ -41,27 +41,23 @@ Can be a number between 1 and 10 or 'all'
 
 ## Planned updates
 
-- [ ] gui execute in new thread & stop function
-- [ ] compatibility for Windows and Linux
+- [x] gui execute in new thread & stop function
+- [ ] compatibility for Windows and Linux -> profiles
     - [ ] auto-detection
 - [x] a GUI for simpler use
-- [ ] an installation utility
-    - [ ] an uninstallation utility
 - [ ] autostart function
 - [ ] option to delete fonts which aren't longer in Google's database
 - [ ] skip fonts which are already installed
-- [ ] be able to install fonts only for users
+- [ ] settings
     - [ ] be able to install fonts without folders for each font
-    - [ ] be able to install fonts in custom directory
 - [ ] more filter options (exact number of styles/max number of styles/one font)
 - [ ] install only fitting styles of a font
 - [x] logging
 - [ ] better logging (to file)
-- [ ] auto-update
-- [ ] multi-threading
-- [ ] languages
-- [ ] auto subset detection (is latin-ext per default in GUI)
-- [ ] icon?
+- [ ] max. amount of fonts
+- [ ] better processing
+- [ ] optimize files
+- [ ] remove zips after cancel
 
 ## Copyright
 This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.

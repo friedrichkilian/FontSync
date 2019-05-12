@@ -23,10 +23,16 @@
 
 from json import loads as parse  # is used to parse Google's JSON file about their fonts
 from urllib.request import urlopen as fetch_internet_file  # is used to download Google's JSON file about their fonts
+import ssl as https_config
 
 from fonts.gfonts_font_family import FontFamily
 
 JSON_DOWNLOAD_URL = 'https://fonts.google.com/metadata/fonts'  # the JSON file is stored here
+
+# SSL doesn't work (idk why) so just disable it?
+# maybe not the best workaround but better than nothing
+# noinspection PyProtectedMember
+https_config._create_default_https_context = https_config._create_unverified_context
 
 
 def get_all_gfonts():

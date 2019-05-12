@@ -31,12 +31,11 @@ SHOULD_PRINT = not get_bool('silent-mode')  # set SHOULD_PRINT to false when sil
 
 
 # This sould ALWAYS be called instead of print() so that silent mode can work
-def log(message, type_of_message='STATUS', label=None):
+def log(message, type_of_message='STATUS', lbl=None):
 
-    print(label)
-    if label is not None:
+    if lbl is not None:
 
-        label.set(message)
+        lbl.set(message)
 
     # print only when silent mode is disabled
     if SHOULD_PRINT:

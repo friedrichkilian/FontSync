@@ -28,9 +28,9 @@
 from tkinter import Tk, Frame, Label, Button, Checkbutton, OptionMenu, Scale, StringVar, IntVar, BooleanVar
 from tkinter.ttk import Progressbar
 from re import sub
+from threading import Thread, current_thread
 
 from gfonts_values import CATEGORIES, SUBSETS
-from font_sync import sync
 from fonts import get_all_gfonts
 from filter import IGNORED
 from filter.gfonts_filter import filter_fonts
@@ -59,18 +59,28 @@ slant = None
 apply_width = None
 width = None
 
+progressbar = None
+
 progress = None
 label = None
 
+button = None
+sync_thread = None
+cancel = True
 
-def get_filtered_fonts_by_gui():
+available_fonts = []
+
+
+# buffer is required because some widgtes call this function with a parameter. It'll give an excepton when this function
+# doesn't accept one
+def get_filtered_fonts_by_gui(buffer=None):
 
     global available_fonts
     available_fonts = filter_fonts(*validate(
         [category for category in category_checkbox_values.keys() if category_checkbox_values[category].get()],
         subset_options.get(subset_selected.get(), IGNORED), stylecount.get() if apply_stylecount.get() else 0,
         thickness.get() if apply_thickness.get() else 0, slant.get() if apply_slant.get() else 0,
-        width.get() if apply_width.get() else 0), gui=(progress, label))
+        width.get() if apply_width.get() else 0), gui=(progress, label, progressbar))
 
     label.set('Checked all fonts ({} fitting found)'.format(len(available_fonts)))
 
@@ -80,7 +90,7 @@ def create_frame():
 
     # create frame
     master = Tk()
-    master.title('Google Fonts Sync by kilianfriedrich')  # set title
+    master.title('Google Fonts Sync by Kilian Friedrich')  # set title
 
     # set size
     master.geometry('710x335')
@@ -246,11 +256,12 @@ def create_frame():
     button_frame = Frame(master, width=230, height=30)
     button_frame.pack_propagate(0)  # don't let the frame resize itself
 
+    global button
     button = Button(button_frame, text='Sync!')  # create button
     # add target function
     # this could be done without lambda:... but this results in the fact that __execute_sync__() is called before the
     # button is pressed
-    button.config(command=__execute_sync__)
+    button.config(command=__launch_sync__)
 
     button.pack(fill='both', expand=1)  # let the btton expand
     button_frame.place(x=10, y=260)  # place the frame
@@ -266,7 +277,9 @@ def create_frame():
 
     global progress
     progress = IntVar()
-    Progressbar(progressbar_frame, variable=progress).pack(fill='both', expand=1)  # create button and pack it
+    global progressbar
+    progressbar = Progressbar(progressbar_frame, variable=progress)  # create button
+    progressbar.pack(fill='both', expand=1)  # pack it
 
     progressbar_frame.place(x=10, y=300)  # place the frame
 
@@ -275,7 +288,7 @@ def create_frame():
     label.set('Nothing in process...')
 
     # add label which stores details about the current process
-    Label(master, textvariable=label, font=('Sans Serif', 12), fg='grey', width=64, anchor='nw').place(x=10, y=310)
+    Label(master, textvariable=label, font=('Sans Serif', 12), fg='grey', width=128, anchor='nw').place(x=10, y=310)
 
     get_filtered_fonts_by_gui()
 
@@ -294,18 +307,37 @@ def __toggle_checkbox__():
     get_filtered_fonts_by_gui()
 
 
+def __launch_sync__():
+
+    global cancel
+    cancel = False
+
+    progressbar.config(max=len(available_fonts))
+
+    button.config(text='Cancel syncing process', command=__cancel_sync__)
+
+    global sync_thread
+    sync_thread = Thread(target=__execute_sync__)
+    sync_thread.start()
+
+
 # syncs
 # make sure this is never called when no frame is cerated before!
 def __execute_sync__():
 
-    # collect inputs
-    categories = [category for category in category_checkbox_values.keys()
-                  if category_checkbox_values[category].get()]
-    subset = subset_options.get(subset_selected.get(), '')
-    stylecount_value = stylecount.get() if apply_stylecount.get() else 0
-    thickness_value = thickness.get() if apply_thickness.get() else 0
-    slant_value = slant.get() if apply_slant.get() else 0
-    width_value = width.get() if apply_width.get() else 0
+    from font_sync import sync
 
     # call font_sync -> sync()
-    sync(categories, subset, stylecount_value, thickness_value, slant_value, width_value)
+    sync(fonts=available_fonts, gui=(progress, label))
+
+    button.config(text='Sync', command=__launch_sync__)
+    progress.set(0)
+
+    label.set('Cancelled.' if cancel else 'Finished syncing.')
+
+
+def __cancel_sync__():
+
+    global cancel
+    cancel = True
+
