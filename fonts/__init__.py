@@ -34,14 +34,16 @@ JSON_DOWNLOAD_URL = 'https://fonts.google.com/metadata/fonts'  # the JSON file i
 # noinspection PyProtectedMember
 https_config._create_default_https_context = https_config._create_unverified_context
 
+json_download = fetch_internet_file(JSON_DOWNLOAD_URL)  # fetch Google's JSON
+
+# Google's JSON is weirdly encoded, has escaped line breaks and begins with ')]}'' for some reason
+# this line will convert the JSON to a readable file
+json_string = json_download.read().decode('utf-8').replace('\\n', '\n').lstrip(')]}\'\n')
+json_content = parse(json_string)  # load the file
+font_families_struct = json_content['familyMetadataList']  # get list of fonts from the file
+fonts = [FontFamily(font_family_struct) for font_family_struct in font_families_struct]
+
 
 def get_all_gfonts():
 
-    json_download = fetch_internet_file(JSON_DOWNLOAD_URL)  # fetch Google's JSON
-
-    # Google's JSON is weirdly encoded, has escaped line breaks and begins with ')]}'' for some reason
-    # this line will convert the JSON to a readable file
-    json_string = json_download.read().decode('utf-8').replace('\\n', '\n').lstrip(')]}\'\n')
-    json_content = parse(json_string)  # load the file
-    font_families_struct = json_content['familyMetadataList']  # get list of fonts from the file
-    return [FontFamily(font_family_struct) for font_family_struct in font_families_struct]
+    return fonts

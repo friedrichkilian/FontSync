@@ -56,8 +56,7 @@ Can be a number between 1 and 10 or 'all'
 - [ ] better logging (to file)
 - [ ] max. amount of fonts
 - [ ] better processing
-- [ ] optimize files
-- [ ] remove zips after cancel
+- [x] optimize files
 
 ## Copyright
 This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
