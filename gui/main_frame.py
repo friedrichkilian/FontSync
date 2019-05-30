@@ -24,14 +24,14 @@
 #   SHAREALIKE - If you remix, transform, or build upon the material, you must distribute your contributions under the
 #                same license as the original.
 # Follow https://creativecommons.org/licenses/by-nc-sa/4.0/ for more information.
-
+import sys
 from tkinter import Tk, Frame, Label, Button, Checkbutton, OptionMenu, Scale, StringVar, IntVar, BooleanVar
+from tkinter.filedialog import askdirectory
 from tkinter.ttk import Progressbar
 from re import sub
 from threading import Thread, current_thread
 
 from gfonts_values import CATEGORIES, SUBSETS
-from fonts import get_all_gfonts
 from filter import IGNORED
 from filter.gfonts_filter import filter_fonts
 from gfonts_values import validate
@@ -59,12 +59,15 @@ slant = None
 apply_width = None
 width = None
 
+outputdir = '/Library/Fonts' if sys.platform.lower().startswith('darwin')\
+    else 'C:/Windows/Fonts' if sys.platform.lower().startswith('win') else '/usr/share/fonts'
+
 progressbar = None
 
 progress = None
 label = None
 
-button = None
+sync_button = None
 sync_thread = None
 cancel = True
 
@@ -73,7 +76,7 @@ available_fonts = []
 
 # buffer is required because some widgtes call this function with a parameter. It'll give an excepton when this function
 # doesn't accept one
-def get_filtered_fonts_by_gui(buffer=None):
+def get_filtered_fonts_by_gui():
 
     global available_fonts
     available_fonts = filter_fonts(*validate(
@@ -161,6 +164,10 @@ def create_frame():
 
     subset_frame.config(width=200, height=60)  # set frame sizes
     subset_frame.place(x=250, y=10)  # add frame to window
+
+    # ===== OUTPUT SECTION ===== #
+    Label(master, text='Select output directory').place(x=460, y=10)
+    Button(text='Browse', command=askdirectory).place(x=460, y=30)
 
     # ===== STYLECOUNT SECTION ===== #
     stylecount_frame = Frame(master, highlightbackground='black', highlightthickness=1)  # create frame for this stuff
@@ -253,18 +260,31 @@ def create_frame():
     #   a frame's size can be set in pixels
     #   -> let the button fill the frame
     # this makes the button look bad but that's ok
-    button_frame = Frame(master, width=230, height=30)
-    button_frame.pack_propagate(0)  # don't let the frame resize itself
+    sync_button_frame = Frame(master, width=230, height=30)
+    sync_button_frame.pack_propagate(0)  # don't let the frame resize itself
 
-    global button
-    button = Button(button_frame, text='Sync!')  # create button
+    global sync_button
+    sync_button = Button(sync_button_frame, text='Sync!')  # create button
     # add target function
     # this could be done without lambda:... but this results in the fact that __execute_sync__() is called before the
     # button is pressed
-    button.config(command=__launch_sync__)
+    sync_button.config(command=__launch_sync__)
 
-    button.pack(fill='both', expand=1)  # let the btton expand
-    button_frame.place(x=10, y=260)  # place the frame
+    sync_button.pack(fill='both', expand=1)  # let the btton expand
+    sync_button_frame.place(x=10, y=260)  # place the frame
+
+    # ===== SETTINGS BUTTON SECTION ===== #
+    # create a frame for the button
+    # this is needed for the following reason:
+    #   the size of a button can't be set in pixels
+    #   a frame's size can be set in pixels
+    #   -> let the button fill the frame
+    # this makes the button look bad but that's ok
+    settings_button_frame = Frame(master, width=230, height=30)
+    settings_button_frame.pack_propagate(0)
+
+    Button(settings_button_frame, text='Settings', command=__settings__).pack(fill='both', expand=1)
+    settings_button_frame.place(x=10, y=220)
 
     # ===== PROGRESS BAR SECTION ===== #
     # create a frame for the progress bar
@@ -314,7 +334,7 @@ def __launch_sync__():
 
     progressbar.config(max=len(available_fonts))
 
-    button.config(text='Cancel syncing process', command=__cancel_sync__)
+    sync_button.config(text='Cancel syncing process', command=__cancel_sync__)
 
     global sync_thread
     sync_thread = Thread(target=__execute_sync__)
@@ -328,9 +348,9 @@ def __execute_sync__():
     from font_sync import sync
 
     # call font_sync -> sync()
-    sync(fonts=available_fonts, gui=(progress, label))
+    sync(fonts=available_fonts, gui=(progress, label), folder=outputdir)
 
-    button.config(text='Sync', command=__launch_sync__)
+    sync_button.config(text='Sync', command=__launch_sync__)
     progress.set(0)
 
     label.set('Cancelled.' if cancel else 'Finished syncing.')
@@ -341,3 +361,17 @@ def __cancel_sync__():
     global cancel
     cancel = True
 
+
+def __settings__():
+
+    __cancel_sync__()
+
+
+def __get_dir__():
+
+    folder = askdirectory()
+
+    global outputdir
+    outputdir = folder if folder != '' else outputdir
+
+    print(outputdir)

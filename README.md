@@ -42,20 +42,17 @@ Can be a number between 1 and 10 or 'all'
 ## Planned updates
 
 - [x] gui execute in new thread & stop function
-- [ ] compatibility for Windows and Linux -> profiles
-    - [ ] auto-detection
+- [x] compatibility for Windows and Linux -> profiles
+    - [x] auto-detection
 - [x] a GUI for simpler use
 - [ ] autostart function
 - [ ] option to delete fonts which aren't longer in Google's database
 - [ ] skip fonts which are already installed
-- [ ] settings
-    - [ ] be able to install fonts without folders for each font
 - [ ] more filter options (exact number of styles/max number of styles/one font)
-- [ ] install only fitting styles of a font
+- [ ] only fitting styles of a font
 - [x] logging
 - [ ] better logging (to file)
 - [ ] max. amount of fonts
-- [ ] better processing
 - [x] optimize files
 
 ## Copyright

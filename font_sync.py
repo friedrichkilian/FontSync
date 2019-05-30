@@ -28,19 +28,18 @@ from zipfile import ZipFile as ZIPFile
 from os import makedirs as make_dir, remove as remove_file
 
 from logging import log
-from settings import get_setting
 from filter.gfonts_filter import filter_fonts
 from gfonts_values import validate
 from args import args_interface as args
 
 
 # this script takes filter as arguments, checks them and syncs fonts
-def sync(_filter=None, fonts=None, gui=None):
+def sync(_filter=None, fonts=None, gui=None, folder='/Library/Fonts'):
 
     fonts = fonts if fonts is not None else filter_fonts(*_filter)
 
     # create target folder if it doesn't exist
-    make_dir('/Library/Fonts/GoogleFonts', exist_ok=True)
+    make_dir(folder, exist_ok=True)
 
     # get all filtered fonts and iterate through them
     for i in range(0, len(fonts)):
@@ -57,8 +56,8 @@ def sync(_filter=None, fonts=None, gui=None):
             gui[0].set(i)
 
         # get target directory / target file
-        dir_name = font_family.family_name.replace(' ', get_setting('output_dir_space_replacement'))
-        dir_path = get_setting('output_dir').format(dir_name)
+        dir_name = font_family.family_name.replace(' ', '')
+        dir_path = (folder + dir_name) if folder.endswith('/') or folder.endswith('\\') else (folder + '/' + dir_name)
         zip_path = dir_path + '.zip'  # fonts will be downloaded as .zip and extracted
 
         # get download URL
