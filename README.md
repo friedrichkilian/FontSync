@@ -1,7 +1,5 @@
 # Google Font Sync
-This python script downloads all fonts from Google Fonts and stores them under `Library\Fonts\GoogleFonts`.
-
-It's only compatible to macOS right now!!
+This python script downloads all fonts from Google Fonts and installs them (/moves them in the font folder of the OS).
 
 ## Use
 
