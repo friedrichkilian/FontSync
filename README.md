@@ -39,7 +39,7 @@ over 18 or under 2 is given, the input will be taken as 'all'.
 
 Can be a number between 1 and 10 or 'all'
 
-## Planned updates
+## Possible updates
 
 - [x] gui execute in new thread & stop function
 - [x] compatibility for Windows and Linux -> profiles
