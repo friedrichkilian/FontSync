@@ -32,8 +32,10 @@ def filter_fonts(category_list, subset, stylecount, slant, thickness, width, gui
 
     if gui is None:
 
-        return [font for font in get_all_gfonts()
-                if __filter_font_family__(font, category_list, subset, stylecount, slant, thickness, width)]
+        fonts = [font for font in get_all_gfonts()
+                 if __filter_font_family__(font, category_list, subset, stylecount, slant, thickness, width)]
+
+        return fonts
 
     all_fonts = get_all_gfonts()
     filtered_fonts = list()
@@ -56,7 +58,7 @@ def filter_fonts(category_list, subset, stylecount, slant, thickness, width, gui
 # takes filter specification as parameters
 def __filter_font_family__(font_family, category_list, subset, stylecount, slant, thickness, width, label=None):
 
-    log('Checking ' + font_family.family_name + '...', lbl=label)  # log 'Checking [...]...'
+    log('Checking ' + font_family.family_name + '...', lbl=[0, label])  # log 'Checking [...]...'
 
     return (category_list is IGNORED or font_family.category.lower().replace(' ', '-') in category_list) \
         and (subset is IGNORED or subset in font_family.subsets) \

@@ -32,10 +32,12 @@ from filter.gfonts_filter import filter_fonts
 from gfonts_values import validate
 from args import args_interface as args
 
+outputdir = '/Library/Fonts' if sys.platform.lower().startswith('darwin') \
+    else 'C:/Windows/Fonts' if sys.platform.lower().startswith('win') else '/usr/share/fonts'
+
 
 # this script takes filter as arguments, checks them and syncs fonts
-def sync(_filter=None, fonts=None, gui=None, folder='/Library/Fonts'):
-
+def sync(_filter=None, fonts=None, gui=None, folder=outputdir):
     fonts = fonts if fonts is not None else filter_fonts(*_filter)
 
     # create target folder if it doesn't exist
@@ -46,13 +48,11 @@ def sync(_filter=None, fonts=None, gui=None, folder='/Library/Fonts'):
 
         from gui.main_frame import cancel
         if cancel:
-
             break
 
         font_family = fonts[i]
 
         if gui is not None:
-
             gui[0].set(i)
 
         # get target directory / target file
@@ -65,24 +65,23 @@ def sync(_filter=None, fonts=None, gui=None, folder='/Library/Fonts'):
         download_url = 'https://fonts.google.com/download?family={}'.format(download_name)
 
         log(font_family.family_name + ' - Downloading ' + font_family.family_name + ' from ' + download_url + ' to '
-            + zip_path + '...', lbl=gui[1])
+            + zip_path + '...', lbl=gui)
 
         open(zip_path, 'x')
 
         internet.urlretrieve(download_url, zip_path)  # retrieve zip file
         zip_file = ZIPFile(zip_path, 'r')  # open zip file
 
-        log(font_family.family_name + ' - Clearing ' + dir_path + '/*...', lbl=gui[1])
+        log(font_family.family_name + ' - Clearing ' + dir_path + '/*...', lbl=gui)
 
         make_dir(dir_path, exist_ok=True)  # create target path if not existing
 
         # clear target folder if it already existed
         files = get_files(dir_path + '/*')
         for f in files:
-
             remove_file(f)
 
-        log(font_family.family_name + ' - Extracting ' + zip_path + '...', lbl=gui[1])
+        log(font_family.family_name + ' - Extracting ' + zip_path + '...', lbl=gui)
 
         zip_file.extractall(dir_path)  # extract files
 
@@ -91,17 +90,15 @@ def sync(_filter=None, fonts=None, gui=None, folder='/Library/Fonts'):
         for f in files:
 
             if not f.endswith('.ttf'):
-
                 remove_file(f)
 
-        log(font_family.family_name + ' - Deleting ' + zip_path + '...', lbl=gui[1])
+        log(font_family.family_name + ' - Deleting ' + zip_path + '...', lbl=gui)
 
         remove_file(zip_path)  # remove zip file after extraction
 
 
 # just execute if this script is called via command line directly! (not via font_sync_gui.py)
 if __name__ == '__main__':
-
     # sync with command line arguments
     sync(_filter=validate(args.get_list('category'), args.get_str('subset'), args.get_int('stylecount'),
                           args.get_int('thickness'), args.get_int('slant'), args.get_int('width')))

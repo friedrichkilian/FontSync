@@ -35,7 +35,7 @@ def log(message, type_of_message='STATUS', lbl=None):
 
     if lbl is not None:
 
-        lbl.set(message)
+        lbl[1].set(message)
 
     # print only when silent mode is disabled
     if SHOULD_PRINT:

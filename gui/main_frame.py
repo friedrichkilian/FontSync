@@ -69,7 +69,7 @@ label = None
 
 sync_button = None
 sync_thread = None
-cancel = True
+cancel = False
 
 available_fonts = []
 
@@ -283,7 +283,7 @@ def create_frame():
     settings_button_frame = Frame(master, width=230, height=30)
     settings_button_frame.pack_propagate(0)
 
-    Button(settings_button_frame, text='Settings', command=__settings__).pack(fill='both', expand=1)
+    Button(settings_button_frame, text='Settings (not implemented)', command=__settings__).pack(fill='both', expand=1)
     settings_button_frame.place(x=10, y=220)
 
     # ===== PROGRESS BAR SECTION ===== #

@@ -1,12 +1,15 @@
-# Google Font Sync
+# Google Font Sync (Python 3.9.0)
 This python script downloads all fonts from Google Fonts and installs them (/moves them in the font folder of the OS).
 
-## Use
+## Known Bugs
+- Target Directory Selection doesn't work on macOS (that's a python bug)
+
+## How to use
 
 There are currently 6 supported arguments:
 1. [category](#category)
 2. [subset](#subset)
-3. [min. amount of styles (accessed via -stylecount)](#number-of-styles-accessed-via--stylecount)
+3. [min. amount of styles (-stylecount)](#number-of-styles-accessed-via--stylecount)
 4. [thickness](#thickness-slant--width)
 5. [slant](#thickness-slant--width)
 6. [width](#thickness-slant--width)
@@ -15,29 +18,35 @@ To use these arguments simply call them via "-[argname] [value(s)]" in the comma
 Example: "font_sync.py -category all -subset latin-ext -width 2"
 
 #### category
-Can be one of 'serif', 'sans-serif', 'display', 'handwriting' and 'monospace'.
-For all styles you can use 'all', if you want to include a specific set of categories you can simply add multiple values
-(like "-charset serif handwriting" for serif & handwriting)
+`serif`, `sans-serif`, `display`, `handwriting` or `monospace`.<br>
+Default:  `all`.
 
-When a category is invalid the category will be ignored (when other, valid categories are given) or taken as 'all' (if
-no other valid category is given).
+You may also include multiple values:<br>
+`font_sync.py -category serif handwriting`
+
+Invalid categories are ignored.
 
 #### subset
-Can be one of 'arabic', 'bengali', 'chinese-simplified', 'chinese-traditional', 'cyrillic', 'cyrillic-ext',
-'devanagari', 'greek', 'greek-ext', 'gujarati', 'gurmukhi', 'hebrew', 'japanese', 'kannada', 'khmer', 'korean', 'latin',
-'latin-ext', 'malayalam', 'myanmar', 'oriya', 'sinhala', 'tamil', 'telugu', 'thai', 'vietnamese' while 'latin-ext' is
-recommended. For all subsets you can use 'all'. Wrong inputs will be taken as 'all' as well.
+`arabic`, `bengali`, `chinese-simplified`, `chinese-traditional`, `cyrillic`, `cyrillic-ext`,
+`devanagari`, `greek`, `greek-ext`, `gujarati`, `gurmukhi`, `hebrew`, `japanese`, `kannada`, `khmer`, `korean`, `latin`,
+`latin-ext`, `malayalam`, `myanmar`, `oriya`, `sinhala`, `tamil`, `telugu`, `thai`, or `vietnamese`.<br>
 
-#### number of styles (accessed via -stylecount)
+Invalid subsets are ignored.
 
-Can be a number between 2 and 18 or 'all'. All fonts which includes more or equal styles are selected. When a number
-over 18 or under 2 is given, the input will be taken as 'all'.
+#### number of styles (-stylecount)
+Between `2` and `10`.<br>
+Default: `all`.
+
+All fonts with so many or more styles are selected.<br>
+Invalid inputs are ignored.
 
 #### thickness, slant & width
+Between `1` and `10`.<br>
+Default: `all`.
 
-Can be a number between 1 and 10 or 'all'
+Invalid inputs are ignored.
 
-## Possible updates
+## TO-DOs
 
 - [x] gui execute in new thread & stop function
 - [x] compatibility for Windows and Linux -> profiles
